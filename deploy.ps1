@@ -1,7 +1,7 @@
 Connect-AzAccount
 
 $adminLogin = "adminuser"
-$resourceGroupName = "rgcsuarchitecture2"
+   $resourceGroupName = "rgcsuarchitecture"
 $location = "eastus"
 
 New-AzResourceGroup -Name $resourceGroupName  -Location $location
@@ -53,3 +53,8 @@ Add-AzSqlDatabaseToFailoverGroup `
    -ServerName $serverName `
    -FailoverGroupName $failoverGroupName
 Write-host "Successfully added the database to the failover group..."
+
+$myIP = (Invoke-WebRequest -uri "https://api.ipify.org/").Content
+
+New-AzSqlServerFirewallRule -FirewallRuleName "Rule01" -ResourceGroupName $resourceGroupName -ServerName $serverName -StartIpAddress $myIP -EndIpAddress $myIP
+New-AzSqlServerFirewallRule -FirewallRuleName "Rule01" -ResourceGroupName $resourceGroupName -ServerName $drServerName -StartIpAddress $myIP -EndIpAddress $myIP
