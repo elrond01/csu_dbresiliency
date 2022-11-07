@@ -1,8 +1,10 @@
 Connect-AzAccount
 
 $adminLogin = "adminuser"
-   $resourceGroupName = "rgdbresiliency"
+$resourceGroupName = "rgdbresiliency"
 $location = "eastus"
+
+Set-AzContext -TenantId 16b3c013-d300-468d-ac64-7eda0820b6d3
 
 New-AzResourceGroup -Name $resourceGroupName  -Location $location
 New-AzResourceGroupDeployment -ResourceGroupName $resourceGroupName  -TemplateFile ./main.bicep -administratorLogin $adminLogin
