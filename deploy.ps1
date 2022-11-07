@@ -1,7 +1,7 @@
 Connect-AzAccount
 
 $adminLogin = "adminuser"
-   $resourceGroupName = "rgcsuarchitecture"
+   $resourceGroupName = "rgdbresiliency"
 $location = "eastus"
 
 New-AzResourceGroup -Name $resourceGroupName  -Location $location
