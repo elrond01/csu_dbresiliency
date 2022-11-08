@@ -17,8 +17,8 @@ param location string = resourceGroup().location
 param administratorLogin string
 
 @description('The administrator password of the SQL logical server.')
-@secure()
-param administratorLoginPassword string
+@secure() 
+param administratorLoginPassword string = 'SqlPasswd1234567'
 
 resource sqlServer 'Microsoft.Sql/servers@2021-08-01-preview' = {
   name: serverName

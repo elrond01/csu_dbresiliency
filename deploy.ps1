@@ -1,10 +1,13 @@
 Connect-AzAccount
 
 $adminLogin = "adminuser"
-$resourceGroupName = "rgdbresiliency"
+$resourceGroupName = "rgdbresiliency4"
 $location = "eastus"
+$databaseName = "dbapp1"
+$drLocation = "westus"
+$password = "SqlPasswd1234567"
 
-Set-AzContext -TenantId 16b3c013-d300-468d-ac64-7eda0820b6d3
+# Set-AzContext -TenantId 16b3c013-d300-468d-ac64-7eda0820b6d3
 
 New-AzResourceGroup -Name $resourceGroupName  -Location $location
 New-AzResourceGroupDeployment -ResourceGroupName $resourceGroupName  -TemplateFile ./main.bicep -administratorLogin $adminLogin
@@ -17,10 +20,8 @@ Write-Output $failoverGroupName
 $subscriptionId = (Get-AzContext).Subscription.Id
 Write-Output $subscriptionId
 
-$password = Read-Host -Prompt 'Password for secondary sql server:' -AsSecureString
 $serverName = (Get-AzResource -ResourceGroupName $resourceGroupName -ResourceType Microsoft.Sql/servers).Name|  Select-Object -First 1
-$databaseName = "dbapp1"
-$drLocation = "westus"
+
 $drServerName = (Get-AzResource -ResourceGroupName $resourceGroupName -ResourceType Microsoft.Sql/servers).Name|  Select-Object -First 1
 $drServerName = $drServerName + "dr"
 
@@ -58,5 +59,9 @@ Write-host "Successfully added the database to the failover group..."
 
 $myIP = (Invoke-WebRequest -uri "https://api.ipify.org/").Content
 
-New-AzSqlServerFirewallRule -FirewallRuleName "Rule01" -ResourceGroupName $resourceGroupName -ServerName $serverName -StartIpAddress $myIP -EndIpAddress $myIP
+Write-host "Adding database rules for client and Azure ips..."
+
+New-AzSqlServerFirewallRule -ResourceGroupName $resourceGroupName -ServerName $serverName -AllowAllAzureIPs
+New-AzSqlServerFirewallRule -ResourceGroupName $resourceGroupName -ServerName $drServerName -AllowAllAzureIPs
+New-AzSqlServerFirewallRule -FirewallRuleName "Rule01" -ResourceGroupName $resourceGroupName -ServerName $serverName -StartIpAddress $myIP -EndIpAddress $myIP 
 New-AzSqlServerFirewallRule -FirewallRuleName "Rule01" -ResourceGroupName $resourceGroupName -ServerName $drServerName -StartIpAddress $myIP -EndIpAddress $myIP
