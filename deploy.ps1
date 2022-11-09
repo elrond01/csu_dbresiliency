@@ -65,3 +65,6 @@ New-AzSqlServerFirewallRule -ResourceGroupName $resourceGroupName -ServerName $s
 New-AzSqlServerFirewallRule -ResourceGroupName $resourceGroupName -ServerName $drServerName -AllowAllAzureIPs
 New-AzSqlServerFirewallRule -FirewallRuleName "Rule01" -ResourceGroupName $resourceGroupName -ServerName $serverName -StartIpAddress $myIP -EndIpAddress $myIP 
 New-AzSqlServerFirewallRule -FirewallRuleName "Rule01" -ResourceGroupName $resourceGroupName -ServerName $drServerName -StartIpAddress $myIP -EndIpAddress $myIP
+
+Write-host "Failover group:"
+Write-Output $failoverGroupName

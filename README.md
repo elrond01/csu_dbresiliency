@@ -17,9 +17,9 @@ IMAGEN ARQUITECTURA
 
 Para desplegar el ambiente base utilizaremos bicep y va a ser deplegada en su subscripcion de azure en east us y su correspondiente region par west us para el DR tanto de nuestra base de datos como de nuestra aplicacion
 
-- logearse a cloud shell (Powershell)
+- logearse a cloud shell (Powershell) ubicarse en ruta a clorar repositorio
 
-`Cd clouddrive`
+`Cd repos`
 
 - Clonar el repo 
 
