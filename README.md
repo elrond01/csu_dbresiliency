@@ -2,7 +2,7 @@
 
 ### [Prerequisitos](#prerequisitos)
 
-### [Paso 1: Crear servidor primario de base de datos, servidor secundario y failover group](#paso1)
+### [Paso 1: Crear servidor primario de base de datos servidor secundario y failover group](#paso-1)
 
 ### [Paso 2: Crear balanceador global y functions](#paso2)
 
@@ -13,7 +13,8 @@ El proposito de este microhack es demostrar el uso del failover group como mecan
 
 # Prerequisitos
 
-## Paso 1: Desplegar las plantillas bicep
+## Paso 1
+## Crear servidor primario de base de datos servidor secundario y failover group
 
 Para desplegar el ambiente base utilizaremos bicep y va a ser deplegada en su subscripcion de azure en EAST US y su correspondiente region par WEST US para el DR tanto de nuestra base de datos como de nuestra aplicacion
 
@@ -36,3 +37,29 @@ Para desplegar el ambiente base utilizaremos bicep y va a ser deplegada en su su
 -username:adminuser
 
 -pass:SqlPasswd1234567
+
+# Pruebas Failover
+
+- Edite el script failover.ps1 alterando la variable SERVERNAME, con el nombre del servidor primario generado que se encuentra en el portal de azure dentro del Failover group de cualquiera de los dos servidores generados.
+
+$serverName = {guid}
+
+- Ejecute la seccion de asignacion de variables resourceGroupName,servername, failoverGroupName, drServerName
+
+- Ejecute parcialmente las secciones de codigo:
+  - Validacion de rol de servidor secundario
+ 
+`(Get-AzSqlDatabaseFailoverGroup -FailoverGroupName $failoverGroupName
+   -ResourceGroupName $resourceGroupName -ServerName $drServerName).ReplicationRole`
+
+    - Validando como resultado `Secondary`
+   
+- Ejecute el failovergroup manual
+
+`Switch-AzSqlDatabaseFailoverGroup -ResourceGroupName $resourceGroupName
+   -ServerName $drServerName -FailoverGroupName $failoverGroupName`
+  
+    - Valide en el portal el cambio de rol o ejecutando nuevamente el script de validacion de rol con el resultado `Primary`
+
+- Ejecute el cambio de rol nuevamente para restablecer el primario
+`Switch-AzSqlDatabaseFailoverGroup -ResourceGroupName $resourceGroupName -ServerName $serverName -FailoverGroupName $failoverGroupName`
