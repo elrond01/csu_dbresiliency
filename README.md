@@ -48,18 +48,24 @@ $serverName = {guid}
 
 - Ejecute parcialmente las secciones de codigo:
   - Validacion de rol de servidor secundario
- 
-`(Get-AzSqlDatabaseFailoverGroup -FailoverGroupName $failoverGroupName
-   -ResourceGroupName $resourceGroupName -ServerName $drServerName).ReplicationRole`
 
-    - Validando como resultado `Secondary`
-   
+```
+    Get-AzSqlDatabaseFailoverGroup -FailoverGroupName $failoverGroupName -ResourceGroupName $resourceGroupName -ServerName $drServerName).ReplicationRole
+```
+
+  
+Valide en el portal el cambio de rol o ejecutando nuevamente el script de validacion de rol con el resultado `Secondary`
+
 - Ejecute el failovergroup manual
 
-`Switch-AzSqlDatabaseFailoverGroup -ResourceGroupName $resourceGroupName
-   -ServerName $drServerName -FailoverGroupName $failoverGroupName`
+```
+Switch-AzSqlDatabaseFailoverGroup -ResourceGroupName $resourceGroupName -ServerName $drServerName -FailoverGroupName $failoverGroupName
+```
   
-    - Valide en el portal el cambio de rol o ejecutando nuevamente el script de validacion de rol con el resultado `Primary`
+Valide en el portal el cambio de rol o ejecutando nuevamente el script de validacion de rol con el resultado `Primary`
 
 - Ejecute el cambio de rol nuevamente para restablecer el primario
-`Switch-AzSqlDatabaseFailoverGroup -ResourceGroupName $resourceGroupName -ServerName $serverName -FailoverGroupName $failoverGroupName`
+
+```
+Switch-AzSqlDatabaseFailoverGroup -ResourceGroupName $resourceGroupName -ServerName $serverName -FailoverGroupName $failoverGroupName
+```
