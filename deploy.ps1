@@ -6,6 +6,7 @@ $location = "eastus"
 $databaseName = "dbapp1"
 $drLocation = "westus"
 $password = "SqlPasswd1234567"
+$storageaccountname = "storagecsu"
 
 # Set-AzContext -TenantId 16b3c013-d300-468d-ac64-7eda0820b6d3
 
@@ -24,6 +25,8 @@ $serverName = (Get-AzResource -ResourceGroupName $resourceGroupName -ResourceTyp
 
 $drServerName = (Get-AzResource -ResourceGroupName $resourceGroupName -ResourceType Microsoft.Sql/servers).Name|  Select-Object -First 1
 $drServerName = $drServerName + "dr"
+
+$storageaccountname = $storageaccountname + $serverName
 
 # Create a secondary server in the failover region
 Write-host "Creating a secondary server in the failover region..."
@@ -66,5 +69,46 @@ New-AzSqlServerFirewallRule -ResourceGroupName $resourceGroupName -ServerName $d
 New-AzSqlServerFirewallRule -FirewallRuleName "Rule01" -ResourceGroupName $resourceGroupName -ServerName $serverName -StartIpAddress $myIP -EndIpAddress $myIP 
 New-AzSqlServerFirewallRule -FirewallRuleName "Rule01" -ResourceGroupName $resourceGroupName -ServerName $drServerName -StartIpAddress $myIP -EndIpAddress $myIP
 
-Write-host "Failover group:"
-Write-Output $failoverGroupName
+
+Write-host "Creating StorageAccount"
+
+$StorageHT = @{
+   ResourceGroupName = $resourceGroupName
+   Name              = $storageaccountname
+   SkuName           = 'Standard_LRS'
+   Location          =  $Location
+ }
+ $StorageAccount = New-AzStorageAccount @StorageHT
+ $Context = $StorageAccount.Context
+
+ $ContainerName = 'databasebackup'
+New-AzStorageContainer -Name $ContainerName -Context $Context -Permission Blob
+
+Write-host "Adding bacpac to storage account"
+$Blob1HT = @{
+   File             = '.\database.bacpac'
+   Container        = $ContainerName
+   Blob             = "database.bacpac"
+   Context          = $Context
+   StandardBlobTier = 'Hot'
+ }
+ Set-AzStorageBlobContent @Blob1HT
+
+$storageuri = "https://"+$storageaccountname+".blob.core.windows.net/databasebackup/database.bacpac"
+
+
+Write-host "Importing bacpac to primary database"
+
+ $importRequest = New-AzSqlDatabaseImport -ResourceGroupName $resourceGroupName `
+ -ServerName $serverName -DatabaseName $databaseName `
+ -DatabaseMaxSizeBytes 5000000 -StorageKeyType StorageAccessKey `
+ -StorageKey $(Get-AzStorageAccountKey `
+     -ResourceGroupName $resourcegroupname -StorageAccountName $storageaccountname).Value[0] `
+     -StorageUri $storageuri `
+     -Edition "Standard" -ServiceObjectiveName "P6" `
+     -AdministratorLogin $adminLogin `
+     -AdministratorLoginPassword $(ConvertTo-SecureString -String $password -AsPlainText -Force)
+
+   Write-host "Failover group:"
+   $failoverGroupName= $failoverGroupName + ".database.windows.net"
+     Write-Output $failoverGroupName 
