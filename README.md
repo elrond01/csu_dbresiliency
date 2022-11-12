@@ -2,14 +2,14 @@
 
 ### [Prerequisitos](#prerequisitos)
 
-### [Paso 1: Crear servidor primario de base de datos, servidor secundario y failover group](#paso-1-crear-servidores-sql-failover)
+### [Paso 1: Crear servidor primario de base de datos, servidor secundario y failover group](#paso1)
 
-### [Paso 2: Crear balanceador global y functions](#reto-2-crear-balanceadorglobal-functions)
+### [Paso 2: Crear balanceador global y functions](#paso2)
 
 ## General
 El proposito de este microhack es demostrar el uso del failover group como mecanismo de resiliencia para bases de datos Azure SQL [Azure SQL FailOver Group Best Practices](https://learn.microsoft.com/en-us/azure/azure-sql/database/auto-failover-group-sql-db?view=azuresql&tabs=azure-powershell) y la interaccion con una app simulada en dos Functions con un balanceador global [Azure Front Door](https://learn.microsoft.com/es-es/azure/frontdoor/front-door-overview).
 
-IMAGEN ARQUITECTURA
+![image](img/architecture.png)
 
 # Prerequisitos
 
