@@ -11,10 +11,16 @@ $storageaccountname = "storagecsu"
 # Set-AzContext -TenantId 16b3c013-d300-468d-ac64-7eda0820b6d3
 
 New-AzResourceGroup -Name $resourceGroupName  -Location $location
+
+Write-host "Creating DB Principal"
 New-AzResourceGroupDeployment -ResourceGroupName $resourceGroupName  -TemplateFile ./main.bicep -administratorLogin $adminLogin
 
 $failoverGroupName = (Get-AzResource -ResourceGroupName $resourceGroupName -ResourceType Microsoft.Sql/servers).Name |  Select-Object -First 1
 $failoverGroupName = $failoverGroupName+"fog"
+
+Write-host "Creating Functions and Frontdoor"
+Register-AzResourceProvider -ProviderNamespace Microsoft.Cdn
+New-AzResourceGroupDeployment -ResourceGroupName $resourceGroupName -TemplateFile .\functions_fdv2.bicep -failoverGroupName $failoverGroupName -databaseName $databaseName -adminLogin $adminLogin -password $password
 
 Write-Output $failoverGroupName
 
@@ -113,6 +119,3 @@ Write-host "Importing bacpac to primary database"
    $failoverGroupName= $failoverGroupName + ".database.windows.net"
      Write-Output $failoverGroupName 
      
-Write-host "Creating Functions and Frontdoor"
-Register-AzResourceProvider -ProviderNamespace Microsoft.Cdn
-New-AzResourceGroupDeployment -ResourceGroupName $resourceGroupName -TemplateFile .\functions_fdv2.bicep -failoverGroupName $failoverGroupName -databaseName $databaseName -adminLogin $adminLogin -password $password
