@@ -39,8 +39,8 @@ param databaseName string
 @description('Database name')
 param adminLogin string
 
-@secure()
-param password string
+@description('Contraseña')
+param contra string
 
 @description('Location for Application Insights')
 param appInsightsLocation string = location
@@ -130,7 +130,7 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
         }
         {
           name: 'SQLConnection'
-          value: 'Server=tcp:${failoverGroupName}${environment().suffixes.sqlServerHostname},1433;Initial Catalog=${databaseName};Persist Security Info=False;User ID=${adminLogin};Password=${password};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
+          value: 'Server=tcp:${failoverGroupName}${environment().suffixes.sqlServerHostname},1433;Initial Catalog=${databaseName};Persist Security Info=False;User ID=${adminLogin};Password=${contra};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
         }
         {
           name: 'Region'
@@ -185,7 +185,7 @@ resource functionApp2 'Microsoft.Web/sites@2021-03-01' = {
         }
         {
           name: 'SQLConnection'
-          value: 'Server=tcp:${failoverGroupName}${environment().suffixes.sqlServerHostname},1433;Initial Catalog=${databaseName};Persist Security Info=False;User ID=${adminLogin};Password=${password};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
+          value: 'Server=tcp:${failoverGroupName}${environment().suffixes.sqlServerHostname},1433;Initial Catalog=${databaseName};Persist Security Info=False;User ID=${adminLogin};Password=${contra};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
         }
         {
           name: 'Region'
