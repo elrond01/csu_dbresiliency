@@ -115,4 +115,4 @@ Write-host "Importing bacpac to primary database"
      
 Write-host "Creating Functions and Frontdoor"
 Register-AzResourceProvider -ProviderNamespace Microsoft.Cdn
-New-AzResourceGroupDeployment -ResourceGroupName $resourceGroupName -TemplateFile .\functions_fd.bicep -failoverGroupName $failoverGroupName -databaseName $databaseName -adminLogin $adminLogin -password $password
+New-AzResourceGroupDeployment -ResourceGroupName $resourceGroupName -TemplateFile .\functions_fdv2.bicep -failoverGroupName $failoverGroupName -databaseName $databaseName -adminLogin $adminLogin -password $password
