@@ -39,11 +39,11 @@ param databaseName string
 @description('Database name')
 param adminLogin string
 
-@description('Database name')
+@secure()
 param password string
 
 @description('Location for Application Insights')
-param appInsightsLocation string = 'east us'
+param appInsightsLocation string = location
 
 @description('The language worker runtime to load in the function app.')
 @allowed([
@@ -58,6 +58,7 @@ var functionAppName2 = appName2
 var hostingPlanName = appName
 var hostingPlanName2 = appName2
 var applicationInsightsName = appName
+var applicationInsightsName2 = appName2
 var storageAccountName = '${uniqueString(resourceGroup().id)}1azfunction'
 var storageAccountName2 = '${uniqueString(resourceGroup().id)}2azfunction'
 var functionWorkerRuntime = runtime
@@ -141,7 +142,7 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
         }
         {
           name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
-          value: applicationInsights.properties.InstrumentationKey
+          value: applicationInsights1.properties.InstrumentationKey
         }
         {
           name: 'FUNCTIONS_WORKER_RUNTIME'
@@ -196,7 +197,7 @@ resource functionApp2 'Microsoft.Web/sites@2021-03-01' = {
         }
         {
           name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
-          value: applicationInsights.properties.InstrumentationKey
+          value: applicationInsights2.properties.InstrumentationKey
         }
         {
           name: 'FUNCTIONS_WORKER_RUNTIME'
@@ -210,9 +211,19 @@ resource functionApp2 'Microsoft.Web/sites@2021-03-01' = {
   }
 }
 
-resource applicationInsights 'Microsoft.Insights/components@2020-02-02' = {
+resource applicationInsights1 'Microsoft.Insights/components@2020-02-02' = {
   name: applicationInsightsName
-  location: appInsightsLocation
+  location: location
+  kind: 'web'
+  properties: {
+    Application_Type: 'web'
+    Request_Source: 'rest'
+  }
+}
+
+resource applicationInsights2 'Microsoft.Insights/components@2020-02-02' = {
+  name: applicationInsightsName2
+  location: location2
   kind: 'web'
   properties: {
     Application_Type: 'web'
