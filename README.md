@@ -38,6 +38,8 @@ Para desplegar el ambiente base utilizaremos bicep y va a ser deplegada en su su
 
 -pass:SqlPasswd1234567
 
+- conectarse por Portal a la base de datos primaria (la que no finaliza con en su nombre DR), y ejecutar el script de /sql/TablaCustomer.sql
+
 ## Paso 2
 # Pruebas Failover
 
