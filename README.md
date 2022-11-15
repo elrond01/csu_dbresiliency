@@ -1,4 +1,3 @@
-# csu_dbresiliency
 # Publicación de Funciones
 
 ### [Prerequisitos](#prerequisitos)
@@ -7,7 +6,7 @@
 
 ### [Paso 2: Abrir Proyecto en Visual Studio](#paso-2)
 
-### [Paso 3: Publicar las Funciones](#paso2)
+### [Paso 3: Publicar las Funciones](#paso-3)
 
 # Prerequisitos
 
