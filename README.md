@@ -4,7 +4,7 @@
 
 ### [Paso 1: Crear servidor primario de base de datos servidor secundario y failover group](#paso-1)
 
-### [Paso 2: Crear balanceador global y functions](#paso2)
+### [Paso 2: Pruebas failover](#paso-2)
 
 ## General
 El proposito de este microhack es demostrar el uso del failover group como mecanismo de resiliencia para bases de datos Azure SQL [Azure SQL FailOver Group Best Practices](https://learn.microsoft.com/en-us/azure/azure-sql/database/auto-failover-group-sql-db?view=azuresql&tabs=azure-powershell) y la interaccion con una app simulada en dos Functions con un balanceador global [Azure Front Door](https://learn.microsoft.com/es-es/azure/frontdoor/front-door-overview).
@@ -38,6 +38,7 @@ Para desplegar el ambiente base utilizaremos bicep y va a ser deplegada en su su
 
 -pass:SqlPasswd1234567
 
+## Paso 2
 # Pruebas Failover
 
 - Edite el script failover.ps1 alterando la variable SERVERNAME, con el nombre del servidor primario generado que se encuentra en el portal de azure dentro del Failover group de cualquiera de los dos servidores generados.
