@@ -29,5 +29,17 @@ En la ruta donde clonamos el repositorio abramos con Visual Studio el archivo SQ
 
 Damos click derecho sobre la solución a la opción publish.
 
-![image](img/publish.png)
+![image](img/Publish.png)
+
+Buscamos una de las funciones que se crearon
+
+![image](img/Publish2.png)
+
+Definimos el "Deployment type" generando un pubxml para publicar desde visual studio y damos click en "Finish"
+
+Damos click en el botón Publish
+
+Repetimos esta operación para la segunda función creada en la región West
+
+
 
