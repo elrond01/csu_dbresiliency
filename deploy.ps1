@@ -1,7 +1,7 @@
 Connect-AzAccount
 
 $adminLogin = "adminuser"
-$resourceGroupName = "rgdbresiliencyv3"
+$resourceGroupName = "rgdbresiliencylab"
 $location = "eastus"
 $databaseName = "dbapp1"
 $drLocation = "westus"
