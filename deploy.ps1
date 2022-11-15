@@ -13,7 +13,7 @@ $storageaccountname = "storagecsu"
 New-AzResourceGroup -Name $resourceGroupName  -Location $location
 
 Write-host "Creating DB Principal"
-New-AzResourceGroupDeployment -ResourceGroupName $resourceGroupName  -TemplateFile ./main.bicep -administratorLogin $adminLogin
+New-AzResourceGroupDeployment -ResourceGroupName $resourceGroupName  -TemplateFile ./bicep/main.bicep -administratorLogin $adminLogin
 
 $failoverGroupName = (Get-AzResource -ResourceGroupName $resourceGroupName -ResourceType Microsoft.Sql/servers).Name |  Select-Object -First 1
 $failoverGroupName = $failoverGroupName+"fog"
@@ -77,4 +77,4 @@ Write-Output $failoverGroupName
      
 Write-host "Creating Functions and Frontdoor"
 Register-AzResourceProvider -ProviderNamespace Microsoft.Cdn
-New-AzResourceGroupDeployment -ResourceGroupName $resourceGroupName -TemplateFile .\functions_fdv2.bicep -failoverGroupName $failoverGroupName -databaseName $databaseName -adminLogin $adminLogin -contra $password
+New-AzResourceGroupDeployment -ResourceGroupName $resourceGroupName -TemplateFile ./bicep/functions_fdv2.bicep -failoverGroupName $failoverGroupName -databaseName $databaseName -adminLogin $adminLogin -contra $password
