@@ -1,5 +1,5 @@
 # Set variables
-$resourceGroupName = "rgdbresiliency"
+$resourceGroupName = "rgdbresiliencylab"
 $serverName = "ato5cabrad3we"
 $failoverGroupName = $serverName+"fog"
 $drServerName = $serverName + "dr"
